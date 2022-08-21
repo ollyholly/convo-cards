@@ -8,6 +8,10 @@ import styled from 'styled-components';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 
+import {
+  useParams
+} from 'react-router-dom';
+
 const theme = createTheme({
   palette: {
     blacky: {
@@ -35,10 +39,18 @@ const Arrow = styled(Box)`
   z-index: 2;
 `;
 
-const content = [1, 2, 3, 4, 5, 6, 7, 8];
+const questions = {
+  1: [1, 2, 3, 4, 5, 6, 7, 8],
+  2: [9, 10, 11, 12, 13, 14, 15, 16],
+  3: [17, 28, 39, 40, 51, 62, 73, 84],
+}
 
 const Questions = () => {
   // const [rolledDice, setRolledDice] = useState([]);
+
+  let { id } = useParams();
+
+  const content = questions[id]
 
   const [q, setQ] = useState(0);
 
@@ -48,6 +60,10 @@ const Questions = () => {
   const handleLeftCLick = () => {
     q === 0 ? setQ(content.length - 1) : setQ(q - 1);
   };
+
+  
+
+
 
   useEffect(() => {}, []);
 
