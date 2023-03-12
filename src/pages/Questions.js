@@ -1,15 +1,13 @@
-import { Container, Box, Typography, Card } from '@mui/material';
-// import data from './Assets/questions.json';
-// import { useEffect } from 'react';
+import { Container, Box, Typography, Card, Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 
 import {
-  useParams
+  useParams,
+  Link
 } from 'react-router-dom';
 
 const theme = createTheme({
@@ -46,7 +44,6 @@ const questions = {
 }
 
 const Questions = () => {
-  // const [rolledDice, setRolledDice] = useState([]);
 
   let { id } = useParams();
 
@@ -61,8 +58,10 @@ const Questions = () => {
     q === 0 ? setQ(content.length - 1) : setQ(q - 1);
   };
 
-  
-
+  const handleRandom = () => {
+    const random = Math.floor(Math.random() * content.length);
+    setQ(random)
+  };
 
 
   useEffect(() => {}, []);
@@ -71,20 +70,21 @@ const Questions = () => {
     <Container>
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Link to={'/questions'} > 
           <Typography variant="h3" gutterBottom my={5} align="center">
             questions
           </Typography>
+          </Link>
         </Box>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'wrap',
-            alignItems: 'flex-start',
-            alignContent: 'center',
+            alignItems: 'center',
             justifyContent: 'center'
           }}
-          mb={5}
+          
         >
           <Arrow variant="outlined" onClick={handleLeftCLick}>
             <KeyboardArrowLeftOutlinedIcon />
@@ -100,6 +100,13 @@ const Questions = () => {
           <Arrow variant="outlined" onClick={handleRightCLick}>
             <KeyboardArrowRightOutlinedIcon />
           </Arrow>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+
+          <Button onClick={handleRandom}>
+            random
+          </Button>
+
         </Box>
       </ThemeProvider>
     </Container>

@@ -1,9 +1,5 @@
 import { Container, Box, Typography, Card } from '@mui/material';
-// import data from './Assets/questions.json';
-// import { useEffect } from 'react';
-// import { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import { motion } from 'framer-motion';
 import {
   Link,
 } from 'react-router-dom';
@@ -16,10 +12,6 @@ const theme = createTheme({
     }
   }
 });
-
-
-
-// const pages = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const questions = {
   1: [1, 2, 3, 4, 5, 6, 7, 8],
