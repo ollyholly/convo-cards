@@ -1,5 +1,5 @@
-import { Container, Box, Typography, Card, Button } from '@mui/material';
-import { useState } from 'react';
+import { Container, Box, Typography, Card, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { useState} from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
@@ -44,9 +44,14 @@ const colors = {
 const Questions = () => {
   let { id } = useParams();
 
-  const content = questions[id];
-
+  
   const [q, setQ] = useState(0);
+  const [category, setCategory] = useState('all');
+  
+  const content = category === 'all' ? questions[id] : questions[id].filter((i)=> i.category === category);
+  const handleChange = (event) => {
+    setCategory(event.target.value);
+  };
 
   const handleRightCLick = () => {
     q === content.length - 1 ? setQ(0) : setQ(q + 1);
@@ -70,6 +75,24 @@ const Questions = () => {
               questions
             </Typography>
           </Link>
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-helper-label">Category</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={category}
+          label="Category"
+          onChange={handleChange}
+        >
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="warmup">Warm-up</MenuItem>
+          <MenuItem value='easy'>Easy</MenuItem>
+          <MenuItem value='medium'>Medium</MenuItem>
+          <MenuItem value='hard'>Hard</MenuItem>
+        </Select>
+      </FormControl>
         </Box>
         <Box
           sx={{
