@@ -1,14 +1,13 @@
 import { Container, Box, Typography, Card, Button } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 
-import {
-  useParams,
-  Link
-} from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+
+import { questions } from '../assets/questions';
 
 const theme = createTheme({
   palette: {
@@ -20,9 +19,7 @@ const theme = createTheme({
 });
 
 const Arrow = styled(Box)`
-  // top: calc(50% - 20px);
   border: solid 1px grey;
-  // position: absolute;
   background: white;
   border-radius: 30px;
   width: 40px;
@@ -37,17 +34,17 @@ const Arrow = styled(Box)`
   z-index: 2;
 `;
 
-const questions = {
-  1: [1, 2, 3, 4, 5, 6, 7, 8],
-  2: [9, 10, 11, 12, 13, 14, 15, 16],
-  3: [17, 28, 39, 40, 51, 62, 73, 84],
+const colors = {
+  warmup: '#a0d2eb',
+  easy: '#d0bdf4',
+  medium: '#fff685',
+  hard: '#feb300'
 }
 
 const Questions = () => {
-
   let { id } = useParams();
 
-  const content = questions[id]
+  const content = questions[id];
 
   const [q, setQ] = useState(0);
 
@@ -60,20 +57,18 @@ const Questions = () => {
 
   const handleRandom = () => {
     const random = Math.floor(Math.random() * content.length);
-    setQ(random)
+    setQ(random);
   };
 
-
-  useEffect(() => {}, []);
 
   return (
     <Container>
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Link to={'/questions'} > 
-          <Typography variant="h3" gutterBottom my={5} align="center">
-            questions
-          </Typography>
+          <Link to={'/questions'}>
+            <Typography variant="h3" gutterBottom my={5} align="center">
+              questions
+            </Typography>
           </Link>
         </Box>
         <Box
@@ -84,16 +79,19 @@ const Questions = () => {
             alignItems: 'center',
             justifyContent: 'center'
           }}
-          
         >
           <Arrow variant="outlined" onClick={handleLeftCLick}>
             <KeyboardArrowLeftOutlinedIcon />
           </Arrow>
 
           <Box m={1}>
-            <Card variant="outlined">
+            <Card variant="outlined" sx={{
+            bgcolor: colors[content[q].category]
+          }}>
               <Box p={2}>
-                <Typography variant="h3">{content[q]}</Typography>
+                <Typography >{content[q].category}</Typography>
+                <Typography variant="h3">{content[q].text}</Typography>
+                
               </Box>
             </Card>
           </Box>
@@ -102,11 +100,7 @@ const Questions = () => {
           </Arrow>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-
-          <Button onClick={handleRandom}>
-            random
-          </Button>
-
+          <Button onClick={handleRandom}>random</Button>
         </Box>
       </ThemeProvider>
     </Container>
