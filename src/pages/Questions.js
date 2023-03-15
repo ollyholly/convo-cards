@@ -1,6 +1,5 @@
 import { Container, Box, Typography, Card, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useState} from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled from 'styled-components';
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
@@ -9,14 +8,7 @@ import { useParams, Link } from 'react-router-dom';
 
 import { questions } from '../assets/questions';
 
-const theme = createTheme({
-  palette: {
-    blacky: {
-      main: '#222222',
-      contrastText: '#fff'
-    }
-  }
-});
+
 
 const Arrow = styled(Box)`
   border: solid 1px grey;
@@ -68,7 +60,6 @@ const Questions = () => {
 
   return (
     <Container>
-      <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Link to={'/questions'}>
             <Typography variant="h3" gutterBottom my={5} align="center">
@@ -125,7 +116,6 @@ const Questions = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button onClick={handleRandom}>random</Button>
         </Box>
-      </ThemeProvider>
     </Container>
   );
 };

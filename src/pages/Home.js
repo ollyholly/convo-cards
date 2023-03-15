@@ -1,24 +1,15 @@
 import { Container, Box, Typography, Card } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
 import { questions } from '../assets/questions';
 
-const theme = createTheme({
-  palette: {
-    blacky: {
-      main: '#222222',
-      contrastText: '#fff'
-    }
-  }
-});
+
 
 const Home = () => {
   const pages = Object.keys(questions);
 
   return (
     <Container>
-      <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Typography variant="h3" gutterBottom my={5} align="center">
             Question packs
@@ -47,7 +38,6 @@ const Home = () => {
             </Box>
           ))}
         </Box>
-      </ThemeProvider>
     </Container>
   );
 };
