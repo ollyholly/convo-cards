@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
-import { Container, Box, Input, Button } from '@mui/material';
+import { Container, Box, Input, Button, Grid } from '@mui/material';
 import { FaFileImage } from 'react-icons/fa';
 import domtoimage from 'dom-to-image';
-// import html2canvas from 'html2canvas';
+import {Resizable} from 're-resizable'
+import Draggable from 'react-draggable'
 
+
+
+const emojiList = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣'];
+
+const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe7Ki-ys2G_MMb_xCrY7nAf87F5ZiIOyCh4f5H_JCTTtMSMLCL'
 
 const ImageMaker = () => {
 
   const [image, setImage] = useState(null);
   const [emojiText, setEmojiText] = useState('');
   const [result, setResult] = useState(null);
+
+  // const [width, setWidth] = useState(50);
+  // const [height, setHeight] = useState(50);
+  // const [fontSize, setFontSize] = useState(24);
+  // const [position, setPosition] = useState({ x: 0, y: 0 });
+
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -28,12 +41,7 @@ const ImageMaker = () => {
     setEmojiText(e.target.value);
   };
 
-  // const handleSaveImage = async () => {
-  //   const node = document.getElementById('image-container');
-  //   const canvas = await html2canvas(node);
-  //   const dataUrl = canvas.toDataURL('image/png');
-  //   setResult(dataUrl);
-  // };
+  
 
   const handleSaveImage = () => {
     const node = document.getElementById('image-container');
@@ -46,6 +54,14 @@ const ImageMaker = () => {
         console.error('Error while saving image:', error);
       });
   };
+
+  const handleEmojiClick = (emoji) => {
+    setEmojiText(emoji);
+  };
+
+
+
+
   
   return (
     <Container maxWidth="sm">
@@ -66,19 +82,48 @@ const ImageMaker = () => {
           fullWidth
         />
       </Box>
-      <Box my={4} id="image-container" position="relative">
-        {image && (
-          <img src={image} alt="Uploaded" style={{ width: '100%' }} />
-        )}
-        <Box
-          position="absolute"
-          top="50%"
-          left="50%"
-          style={{ transform: 'translate(-50%, -50%)' }}
-        >
-          {emojiText}
-        </Box>
+      <Box my={4}>
+        <Grid container spacing={1}>
+          {emojiList.map((emoji, index) => (
+            <Grid item xs={3} key={index} onClick={() => handleEmojiClick(emoji)}>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                border="1px solid #ccc"
+                borderRadius="4px"
+                p={1}
+                style={{ cursor: 'pointer' }}
+              >
+                {emoji}
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
+      <Box my={4} id="image-container" position="relative">
+      {image && (
+        <img src={image} alt="Uploaded" style={{ width: '100%' }} />
+      )}
+      <Draggable>
+      <Resizable
+        defaultSize={{
+          width: 200,
+          height: 360
+        }}
+        style={{
+          background: `url(${imageUrl})`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat'
+        
+      }}
+        lockAspectRatio={true}
+      >
+          {emojiText}
+      </Resizable>
+    </Draggable>
+
+    </Box>
       <Box my={4}>
         <Button variant="contained" onClick={handleSaveImage}>
           Save Image
