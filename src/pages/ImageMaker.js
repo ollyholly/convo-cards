@@ -9,7 +9,7 @@ import Draggable from 'react-draggable'
 
 const emojiList = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣'];
 
-const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe7Ki-ys2G_MMb_xCrY7nAf87F5ZiIOyCh4f5H_JCTTtMSMLCL'
+// const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe7Ki-ys2G_MMb_xCrY7nAf87F5ZiIOyCh4f5H_JCTTtMSMLCL'
 
 const ImageMaker = () => {
 
@@ -17,10 +17,10 @@ const ImageMaker = () => {
   const [emojiText, setEmojiText] = useState('');
   const [result, setResult] = useState(null);
 
-  // const [width, setWidth] = useState(50);
-  // const [height, setHeight] = useState(50);
-  // const [fontSize, setFontSize] = useState(24);
-  // const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [width, setWidth] = useState(50);
+  const [height, setHeight] = useState(50);
+  const [fontSize, setFontSize] = useState(24);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
 
 
@@ -105,24 +105,61 @@ const ImageMaker = () => {
       {image && (
         <img src={image} alt="Uploaded" style={{ width: '100%' }} />
       )}
-      <Draggable>
-      <Resizable
-        defaultSize={{
-          width: 200,
-          height: 360
+      <Draggable
+        onStop={(e, data) => {
+          const newPosition = {
+            x: position.x + data.deltaX,
+            y: position.y + data.deltaY,
+          };
+          setPosition(newPosition);
         }}
-        style={{
-          background: `url(${imageUrl})`,
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat'
-        
-      }}
-        lockAspectRatio={true}
       >
-          {emojiText}
-      </Resizable>
-    </Draggable>
-
+        <Box
+          position="absolute"
+          top={position.y}
+          left={position.x}
+          style={{
+            transform: 'translate(-50%, -50%)',
+            background: 'transparent',
+          }}
+        >
+          <Resizable
+            size={{ width: width, height: height }}
+            onResizeStop={(e, direction, ref, delta) => {
+              setWidth(width + delta.width);
+              setHeight(height + delta.height);
+              setFontSize((width + delta.width + height + delta.height) / 2);
+            }}
+            enable={{
+              top: false,
+              right: false,
+              bottom: false,
+              left: false,
+              topRight: false,
+              bottomRight: true,
+              bottomLeft: false,
+              topLeft: false,
+            }}
+            lockAspectRatio={true}
+          >
+            <Box
+              width="100%"
+              height="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontSize={fontSize}
+              style={{
+                background: 'transparent',
+                overflow: 'visible',
+                padding: '10px',
+              }}
+            >
+              {emojiText}
+            </Box>
+          </Resizable>
+        </Box>
+      </Draggable>
     </Box>
       <Box my={4}>
         <Button variant="contained" onClick={handleSaveImage}>
