@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Box, Input, Button, Grid } from '@mui/material';
 import { FaFileImage } from 'react-icons/fa';
 import domtoimage from 'dom-to-image';
@@ -37,9 +37,9 @@ const ImageMaker = () => {
     }
   };
 
-  const handleEmojiTextChange = (e) => {
-    setEmojiText(e.target.value);
-  };
+  // const handleEmojiTextChange = (e) => {
+  //   setEmojiText(e.target.value);
+  // };
 
   
 
@@ -60,7 +60,19 @@ const ImageMaker = () => {
   };
 
 
+  const contentRef = useRef(null);
 
+  const updateHeightBasedOnContent = () => {
+    if (contentRef.current) {
+      const contentRect = contentRef.current.getBoundingClientRect();
+      setHeight(contentRect.height);
+      setHeight(contentRect.width + 10);
+    }
+  };
+
+  useEffect(() => {
+    updateHeightBasedOnContent();
+  }, [emojiText, fontSize]);
 
   
   return (
@@ -74,14 +86,14 @@ const ImageMaker = () => {
           disableUnderline
         />
       </Box>
-      <Box my={4}>
+      {/* <Box my={4}>
         <Input
           placeholder="Enter emoji or text"
           value={emojiText}
           onChange={handleEmojiTextChange}
           fullWidth
         />
-      </Box>
+      </Box> */}
       <Box my={4}>
         <Grid container spacing={1}>
           {emojiList.map((emoji, index) => (
@@ -102,65 +114,62 @@ const ImageMaker = () => {
         </Grid>
       </Box>
       <Box my={4} id="image-container" position="relative">
-      {image && (
-        <img src={image} alt="Uploaded" style={{ width: '100%' }} />
-      )}
-      <Draggable
-        onStop={(e, data) => {
-          const newPosition = {
-            x: position.x + data.deltaX,
-            y: position.y + data.deltaY,
-          };
-          setPosition(newPosition);
-        }}
-      >
-        <Box
-          position="absolute"
-          top={position.y}
-          left={position.x}
-          style={{
-            transform: 'translate(-50%, -50%)',
-            background: 'transparent',
+        {image && (
+          <img src={image} alt="Uploaded" style={{ width: '100%' }} />
+        )}
+        <Draggable
+          onStop={(e, data) => {
+            const newPosition = {
+              x: position.x + data.deltaX,
+              y: position.y + data.deltaY,
+            };
+            setPosition(newPosition);
           }}
         >
-          <Resizable
-            size={{ width: width, height: height }}
-            onResizeStop={(e, direction, ref, delta) => {
-              setWidth(width + delta.width);
-              setHeight(height + delta.height);
-              setFontSize((width + delta.width + height + delta.height) / 2);
+          <Box
+            position="absolute"
+            top={position.y}
+            left={position.x}
+            style={{
+              transform: 'translate(-50%, -50%)',
+              background: 'transparent',
             }}
-            enable={{
-              top: false,
-              right: false,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: true,
-              bottomLeft: false,
-              topLeft: false,
-            }}
-            lockAspectRatio={true}
           >
-            <Box
-              width="100%"
-              height="100%"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              fontSize={fontSize}
-              style={{
-                background: 'transparent',
-                overflow: 'visible',
-                padding: '10px',
+            <Resizable
+              size={{ width: width, height: height }}
+              onResizeStop={(e, direction, ref, delta) => {
+                setWidth(width + delta.width);
+                setFontSize(fontSize + delta.width);
+                updateHeightBasedOnContent();
               }}
+              lockAspectRatio={true}
             >
-              {emojiText}
-            </Box>
-          </Resizable>
-        </Box>
-      </Draggable>
-    </Box>
+              <Box
+                width="100%"
+                height="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                style={{
+                  background: 'transparent',
+                  overflow: 'visible',
+                }}
+              >
+                <Box
+                  ref={contentRef}
+                  fontSize={fontSize}
+                  whiteSpace="nowrap"
+                  style={{
+                    padding: '5px',
+                  }}
+                >
+                  {emojiText}
+                </Box>
+              </Box>
+            </Resizable>
+          </Box>
+        </Draggable>
+      </Box>
       <Box my={4}>
         <Button variant="contained" onClick={handleSaveImage}>
           Save Image
