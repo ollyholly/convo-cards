@@ -174,7 +174,7 @@ const Life = () => {
 
   return (
     <Container maxWidth="md">
-      <Typography variant="h1" marginBottom={3}>Week Grid</Typography>
+      <Typography variant="h1" marginBottom={3}>Life Grid</Typography>
       <WeekGrid />
     </Container>
   );
